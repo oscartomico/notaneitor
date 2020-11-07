@@ -9,8 +9,8 @@
 		<h2 th:text="#{welcome.message}"></h2>
 		<h3>Esta es una zona privada la web</h3>
 		<p>
-			Usuario Autenticado como : <b>
-				[[${#httpServletRequest.remoteUser}]] </b>
+			Usuario Autenticado como : <b> <span
+				sec:authentication="principal.username" th:inline="text"></span>
 		</p>
 
 		<p>Notas del usuario</p>
@@ -32,8 +32,10 @@
 						<td th:text="${mark.description}">Ejercicio 1</td>
 						<td th:text="${mark.score}">10</td>
 						<td><a th:href="${'/mark/details/' + mark.id}">detalles</a></td>
-						<td><a th:href="${'/mark/edit/' + mark.id}">modificar</a></td>
-						<td><a th:href="${'/mark/delete/' + mark.id}">eliminar</a></td>
+						<td><a sec:authorize="hasRole('ROLE_PROFESSOR')"
+							th:href="${'/mark/edit/' + mark.id}">modificar</a></td>
+						<td><a sec:authorize="hasRole('ROLE_PROFESSOR')"
+							th:href="${'/mark/delete/' + mark.id}">eliminar</a></td>
 					</tr>
 				</tbody>
 			</table>
