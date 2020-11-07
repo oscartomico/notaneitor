@@ -1,11 +1,14 @@
 package ejemplo.uno.demo.controllers;
 
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -31,14 +34,16 @@ public class MarksController {
 	private HttpSession httpSession;
 
 	@RequestMapping("/mark/list/update")
-	public String updateList(Model model){
-		model.addAttribute("markList", marksService.getMarks() );
+	public String updateList(Model model, Principal principal){
+		User user = usersService.findUserByDni(principal.getName());
+		model.addAttribute("markList", marksService.getMarksForUser(user));
 		return "mark/list :: tableMarks";
 	}
 		
 	@RequestMapping("/mark/list")
-	public String getList(Model model){	
-		model.addAttribute("markList", marksService.getMarks() );
+	public String getList(Model model, Principal principal){		
+		User user = usersService.findUserByDni(principal.getName());
+		model.addAttribute("markList", marksService.getMarksForUser(user));
 		return "mark/list";
 	}
 

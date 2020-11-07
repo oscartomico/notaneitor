@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import ejemplo.uno.demo.entities.Mark;
+import ejemplo.uno.demo.entities.User;
 import ejemplo.uno.demo.repositories.MarksRepository;
 
 @Service
@@ -57,5 +58,16 @@ public class MarksService {
 		if (mark.getUser().getDni().equals(dni)) {
 			marksRepository.updateResend(resend, id);
 		}
+	}
+
+	public List<Mark> getMarksForUser(User user) {
+		List<Mark> marks = new ArrayList<Mark>();
+		if (user.getRole().equals("ROLE_STUDENT")) {
+			marks = marksRepository.findAllByUser(user);
+		}
+		if (user.getRole().equals("ROLE_PROFESSOR")) {
+			marks = getMarks();
+		}
+		return marks;
 	}
 }
